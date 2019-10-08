@@ -1,0 +1,92 @@
+.profile-pic{
+    width: 50px;
+    height: 50px;
+    margin: 3px;
+    border-radius: 50%;  
+    border: 2px solid #2b90d9;	
+}
+.feed-controls .fa-thumbs-up, .feed-controls .fa-heart, .feed-controls .fa-comment{
+    margin: 0px 3px 0px 0px;
+}
+ .feed-controls .fa-heart, .feed-controls .fa-comment{
+ 	margin: 0px 3px;
+ }
+ .feed-edit-items .arrow-up{
+ 	margin-left: 75px !important;
+ }
+ .feed-edit-items{
+    position: absolute !important;
+    right: 18px !important;
+    margin-top: 38px;
+    z-index: 1000;
+ }
+ .edit-feed:hover{
+ 	color: red;
+ }
+ .posted-pic, .feed-music-player{
+    display: inline-block;
+    background-size: cover !important;
+    min-height: 300px;
+    width: 100%;
+    margin: 5px 0px;
+    background: #000;
+    border: 1px solid #e6e6e6;
+ }
+ .feed-music-player{
+
+ }
+.comment-box{
+    width: 100%;
+}
+.comment-box-items{
+    border: 1px solid #e6e6e6;
+    width: 320px;
+    border-radius: 3px;
+    padding: 5px;
+    /*max-height: 220px;*/
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+    padding: 5px 5px 0px 5px;
+    margin-top: 5px;
+}
+.view-more{
+    width: 60px;
+    padding: 3px 0px;
+    margin: auto;
+}
+ app-commentitem{
+    display: inline-block;
+    width: 100%;
+ }
+ .feed-item{
+    word-wrap: break-word;
+ }
+ .edit-feed{
+    height: 30px;
+    width: 30px;
+    line-height: 29px;
+    border: 1px solid #e6e6e6 !important;
+    border-radius: 3px;
+ }
+
+ .edit-feed i{
+    margin: 0px 9px;    
+ }
+  .edit-feed:hover{
+    border: 1px solid red !important;
+  }
+  .edit-feed:hover i{
+    color: red !important;
+  }
+  .edit-arrow{
+    position: absolute;
+    right: 16px;
+    margin-top:29px;
+  }
+  .story-close-icon{
+    left: 273px;
+    margin-top: 8px;
+    position: absolute;
+  }
+
