@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'wefrenz_angular_latest',
-    script: './server.js'
+    script: 'server.js'
   }],
   deploy: {
     production: {
