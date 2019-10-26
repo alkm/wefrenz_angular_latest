@@ -10,7 +10,7 @@ module.exports = {
       key: '~/.ssh/wefrenz_keypair.pem',
       ref: 'origin/master',
       repo: 'https://github.com/alkm/wefrenz_angular_latest.git',
-      path: '/home/ubuntu/wefrenz_angular_latest',
+      path: '/home/ubuntu/wefrenz_angular_latest/source',
       'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
     }
   }
