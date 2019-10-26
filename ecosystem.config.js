@@ -11,6 +11,7 @@ module.exports = {
       ref: 'origin/master',
       repo: 'https://github.com/alkm/wefrenz_angular_latest.git',
       path: '/home/ubuntu/wefrenz_angular_latest/source',
+      'pre-deploy': 'git reset --hard',
       'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
     }
   }
