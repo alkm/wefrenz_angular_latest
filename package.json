@@ -1,10 +1,13 @@
 {
   "name": "wefrenz",
   "version": "0.0.0",
+  "main": "server.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "restart": "pm2 startOrRestart ecosystem.config.js",
+    "deploy": "pm2 deploy ecosystem.config.js production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
