@@ -18,6 +18,7 @@ var em = new events.EventEmitter();
 var easyrtc = require("easyrtc"); // EasyRTC external module
 //var https = require('https');
 var app = express();
+console.log('>>>><<<>>>'+config.server.port);
 app.set('port', config.server.port);
 /*Settign ssl port****/
 app.set('sslport', config.ssl.port);
