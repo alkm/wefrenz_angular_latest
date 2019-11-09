@@ -17,8 +17,9 @@ var em = new events.EventEmitter();
 //var fs = require('fs');
 var easyrtc = require("easyrtc"); // EasyRTC external module
 //var https = require('https');
+const env = process.env.NODE_ENV || 'development';
 var app = express();
-console.log('>>>><<<>>>'+config.server.port);
+console.log('>>>><<<>>>'+config);
 app.set('port', config.server.port);
 /*Settign ssl port****/
 app.set('sslport', config.ssl.port);
@@ -30,7 +31,7 @@ var chatBuddies = [];
 var clients = [];
 var usedSockets = {};
 
-const env = process.env.NODE_ENV || 'development';
+
 
 //app.use(bodyParser.json());
 app.use(bodyParser.json({limit: '50mb'}));
