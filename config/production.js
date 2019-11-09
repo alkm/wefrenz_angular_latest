@@ -15,7 +15,7 @@ module.exports = {
         hostName:'https://www.wefrenz.com' 	
     },
     ssl:{
-        certificate:'/etc/letsencrypt/live/wefrenz.com/cert.pem',
+        certificate:'cert.pem',
         key:'privkey.pem',
         port: 8443 
     }
