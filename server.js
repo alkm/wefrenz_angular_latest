@@ -25,6 +25,8 @@ var chatBuddies = [];
 var clients = [];
 var usedSockets = {};
 
+const env = process.env.NODE_ENV || 'production';
+
 //app.use(bodyParser.json());
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true})); // support encoded bodies
