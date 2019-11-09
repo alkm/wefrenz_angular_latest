@@ -4,7 +4,8 @@ var path = require('path');
 //var app = express()						// create our app w/ express
 var mongoose = require('mongoose'); 				// mongoose for mongodb
 //var port = process.env.PORT || 3000; 
-var database = require('./config/database'); 			// load the database config
+var database = require('./config/database'); // load the database config
+const config = require('config');		
 var routes = require('routes');
 global.nodeEventer = require('node-eventer').init();
 var bodyParser = require('body-parser');
@@ -17,6 +18,9 @@ var em = new events.EventEmitter();
 var easyrtc = require("easyrtc"); // EasyRTC external module
 //var https = require('https');
 var app = express();
+app.set('port', config.server.port);
+/*Settign ssl port****/
+app.set('sslport', config.ssl.port);
 
 var chatBuddiesConnected = [];
 var chatClients = {};
@@ -25,7 +29,7 @@ var chatBuddies = [];
 var clients = [];
 var usedSockets = {};
 
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || 'development';
 
 //app.use(bodyParser.json());
 app.use(bodyParser.json({limit: '50mb'}));
@@ -79,15 +83,27 @@ mongoose.connect(database.url, function(err){
 	app.use('/photo/', express.static(__dirname + '/media/photos/myphotos/'));
 
 	/*var httpsOptions = {
-	  key: fs.readFileSync('./private.key'),
-	  cert: fs.readFileSync('./certificate.crt')
+	  key: fs.readFileSync('/etc/letsencrypt/live/wefrenz.com/privkey.pem'),
+	  cert: fs.readFileSync('/etc/letsencrypt/live/wefrenz.com/cert.pem')
 	}*/
 	/*const server = https.createServer(httpsOptions, app).listen(port, () => {
 	  	console.log('server running at ' + port)
 
 	});*/
 	//var server = https.createServer(httpsOptions, app).listen(port);
-	var server = http.createServer(app).listen(port);
+	var server;
+	if (Object.keys(config.ssl).length > 0 && config.ssl.constructor === Object) {
+	    server = https.createServer({
+	      key: fs.readFileSync(config.ssl.key),
+	      cert: fs.readFileSync(config.ssl.certificate)
+	    }, app).listen(app.get('sslport'), (req, res) => {
+	      //bunyanLog.info('secure server on port', app.get('sslport'));
+	      console.log('secure server on port', app.get('sslport'));
+	    });
+	}else{
+		server = http.createServer(app).listen(app.get('port'));
+	}
+	
 	var io = require("socket.io").listen(server);
 	var socketServer = io.listen(server, {"log level":1});
 	// Start EasyRTC server
