@@ -19,7 +19,6 @@ var easyrtc = require("easyrtc"); // EasyRTC external module
 //var https = require('https');
 const env = process.env.NODE_ENV || 'development';
 var app = express();
-console.log('>>>><<<>>>'+config);
 app.set('port', config.server.port);
 /*Settign ssl port****/
 app.set('sslport', config.ssl.port);
