@@ -93,7 +93,7 @@ mongoose.connect(database.url, function(err){
 	});*/
 	//var server = https.createServer(httpsOptions, app).listen(port);
 	var server;
-	if (Object.keys(config.ssl).length > 0 && config.ssl.constructor === Object) {
+	/*if (Object.keys(config.ssl).length > 0 && config.ssl.constructor === Object) {
 	    server = https.createServer({
 	      key: fs.readFileSync(config.ssl.key),
 	      cert: fs.readFileSync(config.ssl.certificate)
@@ -101,9 +101,9 @@ mongoose.connect(database.url, function(err){
 	      //bunyanLog.info('secure server on port', app.get('sslport'));
 	      console.log('secure server on port', app.get('sslport'));
 	    });
-	}else{
+	}else{*/
 		server = http.createServer(app).listen(app.get('port'));
-	}
+	//}
 	
 	var io = require("socket.io").listen(server);
 	var socketServer = io.listen(server, {"log level":1});
