@@ -99,7 +99,7 @@ mongoose.connect(database.url, function(err){
 	      cert: fs.readFileSync(config.ssl.certificate)
 	    }, app).listen(app.get('sslport'), (req, res) => {
 	      //bunyanLog.info('secure server on port', app.get('sslport'));
-	      console.log('secure server on port', app.get('sslport'));
+	    	console.log('secure server on port', app.get('sslport'));
 	    });
 	}else{
 		server = http.createServer(app).listen(app.get('port'));
