@@ -17,6 +17,6 @@ module.exports = {
     ssl:{
         certificate:'/var/wefrenz/cert.pem',
         key:'/var/wefrenz/privkey.pem',
-        port: 443 
+        port: 8000; 
     }
 }
