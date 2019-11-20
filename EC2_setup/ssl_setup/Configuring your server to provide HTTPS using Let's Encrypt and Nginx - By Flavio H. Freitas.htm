@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<!-- saved from url=(0105)https://hackernoon.com/configuring-your-server-to-provide-https-using-lets-encrypt-and-nginx-e46a5ae93e41 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <link rel="icon" type="image/png" href="https://hackernoon.com/favicon.png">
+  <link rel="canonical" href="https://hackernoon.com/configuring-your-server-to-provide-https-using-lets-encrypt-and-nginx-e46a5ae93e41">
+  <link rel="icon" type="image/png" href="https://hackernoon.com/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuring your server to provide HTTPS using Let's Encrypt and Nginx - By Flavio H. Freitas</title>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@hackernoon">
+  
+  <meta property="og:url" content="https://hackernoon.com/configuring-your-server-to-provide-https-using-lets-encrypt-and-nginx-e46a5ae93e41">
+  <meta property="og:title" content="Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx">
+  
+  <meta property="og:image" content="https://hackernoon.com/hn-images/1*EShBAToAyxauu6CMsQO6IQ.jpeg">
+  
+
+  <link rel="stylesheet" href="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/all.css" integrity="sha384-6jHF7Z3XI3fF4XZixAuSu0gGKrXwoX/w3uFPxC56OtjChio7wtTGJWRW53Nhx6Ev" crossorigin="anonymous">
+  <link href="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/base.css" rel="stylesheet">
+  <link href="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/story.css" rel="stylesheet">
+  <link href="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/prism.css" rel="stylesheet">
+  <link href="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/subscribe-form.css" rel="stylesheet">
+
+  <script type="text/javascript" async="" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/snippet.js"></script><script type="text/javascript" async="" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/js"></script><script type="text/javascript" async="" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/analytics.js"></script><script async="" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/gtm.js"></script><script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/vue.min.js"></script>
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/content.js"></script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WGQVQ44');</script>
+  <!-- End Google Tag Manager -->
+<style>div.desktop-nav>span>a>button{background-color: rgb(0, 68, 0)}</style><style>div.desktop-nav>span>a>button{color: rgb(0, 255, 0)}</style><style>i.far{color: rgb(0, 255, 0)}</style><style type="text/css">#mc_embed_signup input.mce_inline_error { border-color:#6B0505; } #mc_embed_signup div.mce_inline_error { margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff; }</style><link rel="stylesheet" href="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/snippet.css"></head>
+
+<body style="zoom: 1;">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WGQVQ44"
+  height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div id="root">
+    <header id="header"><nav><a href="https://hackernoon.com/"><img src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/logo-hn.png" height="40" class="logo"></a> <div class="desktop-nav"><div class="spacer"></div> <div class="search-container"><input class="search-input"> <i class="fas fa-search"></i></div> <a href="https://twitter.com/hackernoon" target="_blank"><i class="fab fa-twitter"></i></a> <a href="https://www.facebook.com/hackernoon" target="_blank"><i class="fab fa-facebook-f"></i></a> <a href="https://www.youtube.com/hackernoon" target="_blank"><i class="fab fa-youtube"></i></a> <a href="https://hackernoon.com/configuring-your-server-to-provide-https-using-lets-encrypt-and-nginx-e46a5ae93e41#subscribe-embed"><button class="outline">Subscribe</button></a> <!----> <!----></div></nav></header>
+
+    <div id="top"><button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button> <div class="subnav"><div class="mobile-back"><button><i class="fas fa-arrow-left"></i></button></div> <a href="https://hackernoon.com/tagged/ai" class="">
+          AI
+        </a><a href="https://hackernoon.com/tagged/cryptocurrency" class="">
+          Crypto
+        </a><a href="https://hackernoon.com/tagged/coding" class="">
+          Coding
+        </a><a href="https://hackernoon.com/tagged/futurism" class="">
+          Future
+        </a><a href="https://hackernoon.com/tagged/startups" class="">
+          Startups
+        </a><a href="https://hackernoon.com/about" class="">
+          About
+        </a><a href="https://community.hackernoon.com/" class="">
+          Community
+        </a><a href="https://sponsor.hackernoon.com/" class="">
+          Sponsor
+        </a><a href="https://www.amazon.com/shop/hackernoon" class="">
+          Recommends
+        </a><a href="http://bit.ly/2Pr5wgH" class="sponsor">
+          HN Shirt
+        </a> <div class="dropdown"><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/artificial-intelligence">Artificial Intelligence</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/data">Data</a></li><li><a href="https://hackernoon.com/tagged/data-science">Data Science</a></li><li><a href="https://hackernoon.com/tagged/deep-fakes">Deep Fakes</a></li><li><a href="https://hackernoon.com/tagged/deep-learning">Deep Learning</a></li><li><a href="https://hackernoon.com/the-ai-hierarchy-of-needs-18f111fcc007">Hierarchy of Needs</a></li><li><a href="https://hackernoon.com/tagged/machine-learning">Machine Learning</a></li><li><a href="https://hackernoon.com/busting-ai-myths-you-need-tons-of-data-for-machine-learning-4u214wbg">Myth Busting</a></li><li><a href="https://hackernoon.com/tagged/neural-networks">Neural Networks</a></li><li><a href="https://hackernoon.com/the-simplest-explanation-of-machine-learning-youll-ever-read-bebc0700047c">Thing Label-er</a></li><li><a href="https://hackernoon.com/understanding-what-artificial-intelligence-actually-sees-7d4e5b9e648e">What AI Sees</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/future">The Future of AI</a></div> <ul class="links"><li><a href="https://hackernoon.com/understanding-artificial-intelligence-as-a-service-aiaas-780f2e3f663c">As a Service</a></li><li><a href="https://hackernoon.com/ai-in-five-fifty-and-five-hundred-years-part-one-e630058b547f">In 5 Years</a></li><li><a href="https://hackernoon.com/ai-in-five-fifty-and-five-hundred-years-part-two-fifty-years-1deeb7c5408c">In 50 Years</a></li><li><a href="https://hackernoon.com/ai-in-five-fifty-and-five-hundred-years-part-three-five-hundred-years-10198c00c7c7">In 500 Years</a></li><li><a href="https://hackernoon.com/tagged/bots">Bots</a></li><li><a href="https://hackernoon.com/tagged/chatbots">Chatbots</a></li><li><a href="https://hackernoon.com/how-ai-is-changing-the-future-of-digital-marketing-55c9585db075">Digital Marketing</a></li><li><a href="https://hackernoon.com/ai-in-media-can-a-silicon-brain-journalist-beat-a-fleshnblood-one-d57m32df">Media</a></li><li><a href="https://hackernoon.com/the-essential-guide-to-organizing-an-ai-vs-human-showdown-fe435701d755">Showdown vs. Humans</a></li><li><a href="https://hackernoon.com/ways-in-which-machines-learn-b1824464dd5f">Ways in Which Machines Learn</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/blockchain">Blockchain</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/blockchain-adoption">Adoption</a></li><li><a href="https://hackernoon.com/tagged/blockchain-application">Application</a></li><li><a href="https://hackernoon.com/your-company-will-use-blockchain-in-less-than-10-years-heres-how-6d9da452fa8d">By 2027</a></li><li><a href="https://hackernoon.com/enough-with-the-chainsplaining-part-1-how-to-talk-blockchain-with-empathy-a6ca65910aad">Chainsplaining</a></li><li><a href="https://hackernoon.com/tagged/decentralization">Decentralization</a></li><li><a href="https://hackernoon.com/tagged/blockchain-development">Development</a></li><li><a href="https://hackernoon.com/the-impact-of-blockchain-technology-10-years-from-now-c347e273384d">In Ten Years</a></li><li><a href="https://hackernoon.com/learn-blockchains-by-building-one-117428612f46">Learn by Building</a></li><li><a href="https://hackernoon.com/why-everyone-missed-the-most-important-invention-in-the-last-500-years-c90b0151c169">Mind Blowing Invention</a></li><li><a href="https://hackernoon.com/the-security-token-thesis-4c5904761063">Security Token Thesis</a></li><li><a href="https://hackernoon.com/tagged/smart-contracts">Smart Contracts</a></li><li><a href="https://hackernoon.com/tagged/blockchain-technology">Technology</a></li><li><a href="https://hackernoon.com/tagged/blockchain-top-story">Top Stories</a></li><li><a href="https://hackernoon.com/wtf-is-the-blockchain-1da89ba19348">WTF is Blockchain</a></li><li><a href="https://hackernoon.com/wtf-is-the-blockchain-2min-version-c4ab6ecfaf76">WTF (2 Min Version)</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/bitcoin">Bitcoin</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/bitcoin">All Bitcoin Stories</a></li><li><a href="https://hackernoon.com/tagged/crypto-beyond-capitalism">Beyond Capitalism</a></li><li><a href="https://hackernoon.com/tagged/bitcoin-spotlight">Bitcoin Spotlight</a></li><li><a href="https://hackernoon.com/tagged/bear-market-diaries">Bear Market Diaries</a></li><li><a href="https://hackernoon.com/tagged/bull-market-diaries">Bull Market Diaries</a></li><li><a href="https://hackernoon.com/hacker-noons-bitcoin-manifesto-w32cb30s0">Bitcoin Manifesto</a></li><li><a href="https://hackernoon.com/meet-the-founder-who-pledged-5-057-btc-86m-to-charity-688685e922f6">Ensuing Pineapples</a></li><li><a href="https://hackernoon.com/the-reports-of-bitcoin-environmental-damage-are-garbage-5a93d32c2d7">Environmental Damage</a></li><li><a href="https://hackernoon.com/bitcoin-the-gathering-storm-8000562c0adc">Gathering Storm</a></li><li><a href="https://hackernoon.com/whats-the-backstory-on-the-word-hodl-27756392b698">HODL Backstory</a></li><li><a href="https://hackernoon.com/what-will-bitcoin-look-lke-in-twenty-years-7e75481a798c">In 20 Years</a></li><li><a href="https://community.hackernoon.com/t/did-you-buy-btc-less-than-1-000/9001">Less than $1k</a></li><li><a href="https://hackernoon.com/bitcoins-substantive-technical-road-to-100k-2637b899ffc5">Road to $100k</a></li><li><a href="https://hackernoon.com/what-is-bitcoin-part-1-1755b81984e8">What is Bitcoin?</a></li><li><a href="https://hackernoon.com/why-bitcoin-matters-c8bf733b9fad">Why Bitcoin Matters</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/crypto">More Coins</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/altcoins">Altcoins</a></li><li><a href="https://hackernoon.com/tagged/binance">Binance</a></li><li><a href="https://hackernoon.com/tagged/bitcoin">Bitcoin</a></li><li><a href="https://hackernoon.com/tagged/bitcoin-cash">Bitcoin Cash</a></li><li><a href="https://hackernoon.com/tagged/bitcoin-sv">Bitcoin SV</a></li><li><a href="https://hackernoon.com/tagged/cardano">Cardano</a></li><li><a href="https://hackernoon.com/tagged/eos">EOS</a></li><li><a href="https://hackernoon.com/tagged/ethereum">Ethereum</a></li><li><a href="https://hackernoon.com/tagged/libra">Libra</a></li><li><a href="https://hackernoon.com/tagged/litecoin">Litecoin</a></li><li><a href="https://hackernoon.com/tagged/ripple">Ripple</a></li><li><a href="https://hackernoon.com/tagged/stellar">Stellar</a></li><li><a href="https://hackernoon.com/tagged/tether">Tether</a></li><li><a href="https://hackernoon.com/tagged/tron">TRON</a></li><li><a href="https://hackernoon.com/tagged/cryptocurrency">More</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/engineering">Engineering</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/agile">Agile</a></li><li><a href="https://hackernoon.com/tagged/software-architecture">Architecture</a></li><li><a href="https://hackernoon.com/tagged/mvp">MVP</a></li><li><a href="https://hackernoon.com/tagged/programming">Programming</a></li><li><a href="https://hackernoon.com/tagged/engineering-management">Engineering Management</a></li><li><a href="https://hackernoon.com/tagged/open-source">Open Source</a></li><li><a href="https://hackernoon.com/tagged/software-development">Software Development</a></li><li><a href="https://hackernoon.com/four-startup-engineering-killers-1fb5c498391d">Startup Engineering Killers</a></li><li><a href="https://hackernoon.com/tagged/scrum">Scrum</a></li><li><a href="https://hackernoon.com/tagged/tdd">Test Driven Development</a></li><li><a href="https://hackernoon.com/a-voight-kampff-test-for-identifying-engineering-managers-bb8512c70857">Voight-Kampff Test</a></li><li><a href="https://hackernoon.com/what-is-a-computer-2e40eb382fb7">What is a Computer?</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/programming">Languages</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/c">C</a></li><li><a href="https://hackernoon.com/tagged/java">Java</a></li><li><a href="https://hackernoon.com/tagged/javascript">Javascript</a></li><li><a href="https://hackernoon.com/how-to-create-the-next-great-programming-language-cff4f1ba921">New Language</a></li><li><a href="https://hackernoon.com/tagged/nodejs">NodeJS</a></li><li><a href="https://hackernoon.com/tagged/php">PHP</a></li><li><a href="https://hackernoon.com/tagged/python">Python</a></li><li><a href="https://hackernoon.com/tagged/react">React</a></li><li><a href="https://hackernoon.com/tagged/ruby">Ruby</a></li><li><a href="https://hackernoon.com/tagged/sql">SQL</a></li><li><a href="https://hackernoon.com/tagged/swift">Swift</a></li><li><a href="https://hackernoon.com/tagged/vim">Vim</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/security">Security</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/backend">Backend</a></li><li><a href="https://hackernoon.com/whos-really-behind-the-world-s-most-popular-free-vpns-d74bafc82178?source=collection_archive---------6---------------------">Behind Popular VPNs</a></li><li><a href="https://hackernoon.com/tagged/cybersecurity">Cybersecurity</a></li><li><a href="https://hackernoon.com/tagged/data-breach">Data Breaches</a></li><li><a href="https://hackernoon.com/tagged/encryption">Encryption</a></li><li><a href="https://hackernoon.com/how-to-fake-an-email-from-almost-anyone-in-under-5-minutes-12169dd44a92">Fake Any Email</a></li><li><a href="https://hackernoon.com/tagged/frontend">Frontend</a></li><li><a href="https://hackernoon.com/how-i-hacked-40-websites-in-7-minutes-5b4c28bc8824">Hacked 40 Sites in 7 Min.</a></li><li><a href="https://hackernoon.com/how-i-hacked-modern-vending-machines-43f4ae8decec">Hacked Vending Machine</a></li><li><a href="https://hackernoon.com/tagged/infosec">Info Sec</a></li><li><a href="https://hackernoon.com/11-things-developers-love-hearing-from-non-developer-co-workers-ea94805cf05d">Non-Technical Co-workers</a></li><li><a href="https://hackernoon.com/tagged/privacy">Privacy</a></li><li><a href="https://hackernoon.com/a-hacker-intercepted-your-wifi-traffic-stole-your-contacts-passwords-financial-data-heres-how-4fc0df9ff152">Wifi Crimes</a></li><li><a href="https://hackernoon.com/a-hacker-intercepted-your-wifi-traffic-stole-your-contacts-passwords-financial-data-heres-how-4fc0df9ff152">Unencrypted Traffic</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/technology-trends">Effect of Tech</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/automation">Automation</a></li><li><a href="https://hackernoon.com/3-moments-in-history-that-explain-the-ico-bubble-e7c42896ca6f">ICO Bubble</a></li><li><a href="https://hackernoon.com/tagged/big-data">Big Data</a></li><li><a href="https://hackernoon.com/biohack-your-intelligence-now-or-become-obsolete-97cdd15e395f">Biohack Your Intelligence</a></li><li><a href="http://hackernoon.com/tagged/economics">Economics</a></li><li><a href="https://hackernoon.com/tagged/future">Future</a></li><li><a href="https://hackernoon.com/homo-sapiens-versus-the-internet-57fa096c09ab">Humans vs. Internet</a></li><li><a href="https://hackernoon.com/tagged/iot">Iot</a></li><li><a href="https://hackernoon.com/tagged/robotics">Robotics</a></li><li><a href="https://hackernoon.com/tagged/self-driving-cars">Self-Driving Cars</a></li><li><a href="https://hackernoon.com/tagged/space">Space</a></li><li><a href="https://hackernoon.com/whats-next-for-surveillance-capitalism-and-social-domains-123bc83a6706">Surveillance Capitalism</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://www.startengine.com/hackernoon">Framing Realities</a></div> <ul class="links"><li><a href="https://hackernoon.com/tagged/api">APIs</a></li><li><a href="https://hackernoon.com/tagged/augmented-reality">Augmented Reality</a></li><li><a href="https://hackernoon.com/in-math-we-trust-8ymm3aif">In Math We Trust</a></li><li><a href="https://hackernoon.com/tagged/mixed-reality">Mixed Reality</a></li><li><a href="https://hackernoon.com/the-effective-tech-lead-is-a-100x-engineer-fe49c0372a63">One Hundred X Engineers</a></li><li><a href="https://hackernoon.com/tagged/tech-open-letter">Open Tech Letters</a></li><li><a href="https://hackernoon.com/rick-and-morty-and-the-meaning-of-life-6640df17e263">Rick &amp; Morty &amp; The Meaning of Life</a></li><li><a href="https://hackernoon.com/tagged/social-media">Social Media</a></li><li><a href="https://hackernoon.com/the-time-hacker-method-12970c47f04f">Time Hacker Method</a></li><li><a href="https://hackernoon.com/tagged/virtual-reality">Virtual Reality</a></li><li><a href="https://hackernoon.com/tagged/wtf">WTF</a></li><li><a href="https://hackernoon.com/your-truth-vs-the-truth-271c1407b684">Your Truth vs. The Truth</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/">Evolution</a></div> <ul class="links"><li><a href="https://hackernoon.com/startups-beware-the-next-big-thing-34bdd3cbec4b">Beware the Next Big Thing</a></li><li><a href="https://hackernoon.com/a-brief-history-of-women-in-computing-e7253ac24306">Brief History of Women in Computing</a></li><li><a href="https://hackernoon.com/data-inspired-5c78db3999b2">Data-Driven? Think Again</a></li><li><a href="https://hackernoon.com/tagged/design">Design</a></li><li><a href="https://hackernoon.com/the-failed-algorithms-why-not-to-start-a-startup-in-your-twenties-9d5bb83510a5">Failed Algorithms</a></li><li><a href="https://hackernoon.com/50-big-companies-that-started-with-little-or-no-money-4ef1b68aac25">50 That Started w/ $0</a></li><li><a href="https://hackernoon.com/this-is-the-growth-hack-that-got-my-whole-company-started-f5572fa6d36f">Growth Hack into Startup</a></li><li><a href="https://hackernoon.com/indie-startups-the-ingredients-of-success-74531fe3a019">Indie Startups</a></li><li><a href="https://hackernoon.com/what-does-it-mean-to-be-an-open-startup-f4446984189">Open Startups</a></li><li><a href="https://hackernoon.com/tagged/remote">Remote</a></li><li><a href="https://hackernoon.com/tagged/startup-top-story">Top Startup Stories</a></li><li><a href="https://hackernoon.com/tagged/venture-capital">Venture Capital</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/startup-advice">Education</a></div> <ul class="links"><li><a href="https://hackernoon.com/common-excuses-why-developers-dont-test-their-software-908a465e122c">Don't Test</a></li><li><a href="https://hackernoon.com/tagged/entrepreneurship">Entrepreneurship</a></li><li><a href="https://hackernoon.com/startup-for-dummies-3f75b5372c0a">For Dummies</a></li><li><a href="https://hackernoon.com/tagged/founders">Founders</a></li><li><a href="https://hackernoon.com/tagged/funding">Funding</a></li><li><a href="https://hackernoon.com/tagged/management">Management</a></li><li><a href="https://hackernoon.com/tagged/marketing">Marketing</a></li><li><a href="https://hackernoon.com/tagged/pitching">Pitching</a></li><li><a href="https://hackernoon.com/tagged/product-management">Product Management</a></li><li><a href="https://hackernoon.com/tagged/scaling">Scaling</a></li><li><a href="https://hackernoon.com/tagged/strategy">Strategy</a></li><li><a href="https://hackernoon.com/tagged/ux">User Experience</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/tagged/faagm">FAAGM</a></div> <ul class="links"><li><a href="https://hackernoon.com/if-big-tech-companies-were-simpsons-characters-ea1b55101986">As Simpsons Characters</a></li><li><a href="https://hackernoon.com/tagged/amazon">Amazon</a></li><li><a href="https://hackernoon.com/tagged/apple">Apple</a></li><li><a href="https://hackernoon.com/tagged/facebook">Facebook</a></li><li><a href="https://hackernoon.com/tagged/google">Google</a></li><li><a href="https://hackernoon.com/big-techs-growing-interest-in-blockchain-8100b6daa2b5">Growing Blockchain Interest</a></li><li><a href="https://hackernoon.com/life-after-google-a-comparison-to-startup-life-831e74d5c6f8">Life After Google</a></li><li><a href="https://hackernoon.com/tagged/microsoft">Microsoft</a></li><li><a href="https://hackernoon.com/tagged/netflix">Netflix</a></li><li><a href="https://hackernoon.com/taming-big-tech-5fef0df0f00d">Taming Big Tech</a></li><li><a href="https://hackernoon.com/big-techs-user-data-violations-9e80632c4499">User Data Violations</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/about">About</a></div> <ul class="links"><li><a href="https://readwrite.com/2019/07/17/hacker-noon-rips-out-mediums-software-replaces-it-with-their-own/">About Our New Software</a></li><li><a href="https://everipedia.org/wiki/lang_en/hackernoon">Everipedia Page</a></li><li><a href="https://www.startengine.com/hackernoon">Equity Crowdfundraise</a></li><li><a href="https://www.linkedin.com/company/hackernoon">Extended Network</a></li><li><a href="https://hackernoon.com/about">In Six Words or Less</a></li><li><a href="https://www.instagram.com/hackernoon/">On the Gram</a></li><li><a href="https://help.hackernoon.com/app/page/1QsMWmaVAkO-u4-AtW3THA0i0exrw_JZCeXfaY8Cp85o">Meet the Team</a></li><li><a href="https://podcast.hackernoon.com/">Our Podcast</a></li><li><a href="https://giphy.com/hackernoon">Some Tech GIFs</a></li><li><a href="https://community.hackernoon.com/t/got-tech-memes/9372">Some Tech MEMEs</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="http://auth.hackernoon.com/">Start Writing</a></div> <ul class="links"><li><a href="http://auth.hackernoon.com/">Become Contributing Writer</a></li><li><a href="https://help.hackernoon.com/">Complete Help Section</a></li><li><a href="https://help.hackernoon.com/app/page/1gRbkfKlrfqztzZDQzHGp4v2U0G36alVmE7iODP4d9rg">Complete Writing Guide</a></li><li><a href="https://help.hackernoon.com/app/page/1lDCt9BDTNOQDV7XsOchDBXsmnicvdwa8hw5EFopkDS4">Connect Medium to Hackernoon</a></li><li><a href="https://help.hackernoon.com/app/page/1HNTGwm_UAfdEv9nEKmZHjQHRJtYgLnMIEZ6Vw_ZRZvQ">Create Your Own Call To Action</a></li><li><a href="https://help.hackernoon.com/app/page/1-wg7bxonxAFWdTYl5G4gJwvWLo0iWfBi-XKbdjcYva0">Submit a Story Support</a></li><li><a href="https://help.hackernoon.com/app/page/1fWmAG6zSc-EuxBhHYt-tUIR0wfefRxkmpVRD46byKTw">Troubleshooting Account Creation</a></li><li><a href="https://help.hackernoon.com/app/page/1J5kyBvyWGTELUy4vbK1GrMyPQxaT9KshmduZ4mOH6_A">Write Better Headlines</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://hackernoon.com/hackernoon-20-the-future-of-publication-jazvy3rgb">Hackers</a></div> <ul class="links"><li><a href="https://ywq107vywv.codesandbox.io/">Emoji Maker</a></li><li><a href="https://hackernoon.com/learning-ai-if-you-suck-at-math-8bdfb4b79037">Even If You Suck at Math</a></li><li><a href="https://hackernoon.com/fortnite-and-roblox-are-changing-social-media-as-we-know-it-joc531pl">Fortnite And Roblox</a></li><li><a href="https://jobs.hackernoon.com/">Hacker Jobs</a></li><li><a href="https://community.hackernoon.com/t/please-introduce-yourself/1228/153">Introduction Thread</a></li><li><a href="https://hackernoon.com/how-the-wright-brothers-conquered-the-skies-with-data-8kj23aek">Like the Wright Brothers</a></li><li><a href="https://hackernoon.com/i-made-myself-a-smart-mirror-50e56966c478">Make a SmartMirror</a></li><li><a href="https://www.minds.com/hackernoon/">On Minds Too</a></li><li><a href="https://hackernoon.com/see-peoples-faces-from-miles-away-in-the-195-gigapixel-photo-of-shanghai-2830c1f158ca">Shanghai's 195 Gigapixels</a></li><li><a href="https://community.hackernoon.com/">Start a Discussion</a></li><li><a href="https://hackernoon.com/how-to-unwrap-wine-labels-programmatically-31c8c62b30ce">Unwrap Wine Programmatically</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://community.hackernoon.com/categories">Categories</a></div> <ul class="links"><li><a href="https://community.hackernoon.com/c/ama">AMA</a></li><li><a href="https://community.hackernoon.com/c/code-pong">Code Pong</a></li><li><a href="https://community.hackernoon.com/c/Crypto">Crypto</a></li><li><a href="https://community.hackernoon.com/c/Editorial">Editorial</a></li><li><a href="https://community.hackernoon.com/c/general">General</a></li><li><a href="https://community.hackernoon.com/c/product">Product</a></li><li><a href="https://community.hackernoon.com/c/podcast">Podcast</a></li><li><a href="https://community.hackernoon.com/c/random">Random</a></li><li><a href="https://community.hackernoon.com/c/Software-Development">Software Development</a></li><li><a href="https://community.hackernoon.com/c/Technology">Technology</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://community.hackernoon.com/top">Top Discussions</a></div> <ul class="links"><li><a href="https://community.hackernoon.com/top/all">All Time</a></li><li><a href="https://community.hackernoon.com/t/automation-and-the-future-of-unemployment/1762">Automation &amp; Unemployment</a></li><li><a href="https://community.hackernoon.com/t/i-am-jeff-atwood-codinghorror-co-founder-of-stack-overflow-and-discourse-ask-me-anything-4-8-noon-pst/1800/73">codinghorror AMA</a></li><li><a href="https://community.hackernoon.com/top/daily">Daily</a></li><li><a href="https://community.hackernoon.com/t/who-wants-a-hackernoon-sticker/20/101">Free HackerNoon Sticker</a></li><li><a href="https://hackernoon.com/configuring-your-server-to-provide-https-using-lets-encrypt-and-nginx-e46a5ae93e41">Future of Remote Work</a></li><li><a href="https://community.hackernoon.com/top/monthly">Monthly</a></li><li><a href="https://community.hackernoon.com/top/quarterly">Quarterly</a></li><li><a href="https://community.hackernoon.com/top/weekly">Weekly</a></li><li><a href="https://community.hackernoon.com/top/yearly">Yearly</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://sponsor.hackernoon.com/">Sponsorship Options</a></div> <ul class="links"><li><a href="https://sponsor.hackernoon.com/">Become a Sponsor</a></li><li><a href="https://sponsor.hackernoon.com/#brandasauthor">Brand As Author Program</a></li><li><a href="https://sponsor.hackernoon.com/#billboard">Exclusive Sitewide Billboard</a></li><li><a href="https://jobs.hackernoon.com/">Job Postings</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://sponsor.hackernoon.com/">Green-est Sponsors</a></div> <ul class="links"><li><a href="https://hackernoon.com/list-of-all-brands-as-author-871v432yf">50+ Brands Publishing Here</a></li><li><a href="http://bit.ly/2mdsomY">Be seen in a new Tech Job</a></li><li><a href="http://bit.ly/2kBrHDL">Help your dev team ship 20% faster</a></li><li><a href="http://bit.ly/2NmkXFv">Nodle Cash App has arrived</a></li><li><a href="http://bit.ly/2CzVIZS">Ember Fund currently fundraising</a></li></ul></div></div><div class="category"><div class="section"><div class="heading"><div class="line"></div> <a href="https://www.amazon.com/shop/hackernoon">In publishing 50k+ technology stories, our team has learned a lot about what is good tech, what is bad tech, and what is functional tech. We do not take what's listed here lightly. An employee once threatened in Slack to quit if we listed a good that was deemed "only for tech bruhs who throw trash in the recycling." We did not list it. We did list other dope sh*t. You can support our independent media site by purchasing from our recommendations.</a></div> <ul class="links"></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://www.amazon.com/shop/hackernoon">Top 0.01%</a></div> <ul class="links"><li><a href="https://brave.com/hac724">Brave Browser</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=1JXL5X4JNSJU1">Raspberry Pi</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=QRS963YPI270">Retro Gaming</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=16HJJSG37RIF0">Smart Travel</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=3TGBF459VZI7X">Top Rated Monitors</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=CK1ITX26470S">Wireless Keyboards</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=3C9QCEF31IWNN">Wireless Speakers</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=Q8CDJLY734Q2">Workstation Accessories</a></li></ul></div><div class="section"><div class="heading"><div class="line"></div> <a href="https://www.amazon.com/shop/hackernoon">Green Stuff</a></div> <ul class="links"><li><a href="https://www.amazon.com/shop/hackernoon?listId=TLIY363H75NO">Drinks</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=3852T2FSXNI4D">Duct Tape</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=AUARB82DCJLV">Hoodies</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=3RFEHCOSI1PF6">Puzzles</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=2PQNU7D26W5D0">Masks</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=4JRQKF6R0QRS">Pens</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=2X6M4FPQU3Y8I">Shoes</a></li><li><a href="https://www.amazon.com/shop/hackernoon?listId=1LETYU894YO8P">Socks</a></li></ul></div></div><div class="category"></div></div></div> <div class="ads"><a href="http://bit.ly/2prrUf2" target="_blank" class="sponsor"><img src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/bybit_yellow.gif" alt="Bybit" class="image">
+          Win up to 100 BTC
+        </a></div></div>
+
+    <div class="story story-container">
+      
+      <div class="author">
+        <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/flaviohfreitas&#39;)"></div>
+        <div class="name">
+          <strong><a href="https://hackernoon.com/@flaviohfreitas">Flavio H. Freitas</a></strong>
+          
+          <p>@flaviohfreitas</p>
+          
+          <div class="links">
+            
+            
+            
+            
+          </div>
+        </div>
+      </div>
+      
+
+      <h1 class="title">Configuring your server to provide HTTPS using Let's Encrypt and Nginx</h1>
+      
+      <div class="story-meta">
+        <div class="date">November 14th 2017</div>
+        <div class="share">
+          
+          
+          
+          
+          <a class="twitter" target="_blank" rel="noopener noreferrer" href="https://twitter.com/intent/tweet?text=Configuring%20your%20server%20to%20provide%20HTTPS%20using%20Let%27s%20Encrypt%20and%20Nginx&amp;url=https%3A%2F%2Fhackernoon.com%2Fconfiguring-your-server-to-provide-https-using-lets-encrypt-and-nginx-e46a5ae93e41&amp;hashtags=webdevelopment,devops,programming"><i class="fab fa-twitter"></i> Tweet This</a>
+        </div>
+      </div>
+      <div class="content" v-pre="">
+        <div class="section-inner sectionLayout--insetColumn"><p>This tutorial will teach you how to install Nginx and let it manage the <strong>free</strong> Let's encrypt TLS/SSL certificate. If you are starting now and want a safe server installation, I suggest you read <a href="https://medium.freecodecamp.org/how-to-create-your-first-safe-server-ready-for-production-f1cc60eec69a" target="_blank">this article</a>.</p></div><div class="section-inner sectionLayout--fullWidth"><figure><div class="aspectRatioPlaceholder is-locked"><div class="aspectRatioPlaceholder-fill"></div><img data-image-id="1*EShBAToAyxauu6CMsQO6IQ.jpeg" data-width="5760" data-height="3840" data-is-featured="true" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/1-EShBAToAyxauu6CMsQO6IQ.jpeg"></div><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/photos/OXIv6mxmFPA?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank">Markus Spiske</a> on&nbsp;<a href="https://unsplash.com/search/photos/safe?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank">Unsplash</a></figcaption></figure></div><div class="section-inner sectionLayout--insetColumn"><p>OK, let's start with some definitions and then we start with the magic steps:</p><ul><li>Let's encrypt: is a certificate authority (CA) that provides free digital certificates to allow HTTPS on websites.</li><li><a href="https://hackernoon.com/tagged/nginx" target="_blank">Nginx</a>: is a web server that can be used also as load balancer, reverse proxy, mail proxy and <a href="https://hackernoon.com/tagged/http" target="_blank">HTTP</a> cache.</li><li>HTTPS: (Hyper Text Transfer Protocol Secure) is an implementation of the HTTP protocol over an additional security layer that uses the SSL/TLS protocol.</li><li>SSL/TLS protocol: Transport Layer Security (TLS) and its predecessor, Secure Sockets Layer (SSL) (which is now deprecated) are application protocols that provide communications security over a computer network.</li><li>Certbot: is a client (tool) that runs on the server to fetch and deploy SSL certificates.</li></ul><p>And why should I have an HTTPS website? The main reason that you should use HTTPS is that you guarantee that your connection with the server is secure.</p><p>OK, you just have an HTML page without any dynamic content. So, other reasons are: 1) Google started using HTTPS as a ranking factor, so if you want your website to have a good position on Google's search, you should consider use this. 2) Chrome started showing "Not secure" warning for the pages that are not HTTPS, so if you don't want to scare your users, it's a reason to have it.</p><p>Assuming you have an Ubuntu web server installed and running, and a domain naming pointing to it (in this tutorial the domain name is temporary-website.tk), we will install Nginx in it.</p><h3>Install Nginx and&nbsp;Certbot</h3><p>Connect to your server. Type the following command to install Nginx:</p><pre name="ed13" id="ed13" class="graf graf--pre graf-after--p">$ sudo apt-get install nginx</pre><p>After installing it, you can access your domain and check that something is already available (without HTTPS):</p><figure><div class="aspectRatioPlaceholder is-locked"><div class="aspectRatioPlaceholder-fill"></div><img data-image-id="1*luFxoxn8TSaWzhruNMFj-g.png" data-width="1576" data-height="546" data-action="zoom" data-action-value="1*luFxoxn8TSaWzhruNMFj-g.png" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/1-luFxoxn8TSaWzhruNMFj-g.png"></div><figcaption class="imageCaption">Insecure website</figcaption></figure><p>We will use the Certbot repository to get up-to-date versions of the packages. Let's add it:</p><pre name="0fa5" id="0fa5" class="graf graf--pre graf-after--p">$ sudo add-apt-repository ppa:certbot/certbot</pre><p>Update the package list to have up-to-date items:</p><pre name="4518" id="4518" class="graf graf--pre graf-after--p">$ sudo apt-get update</pre><p>Install Certbot's Nginx package:</p><pre name="8994" id="8994" class="graf graf--pre graf-after--p">$ sudo apt-get install python-certbot-nginx</pre><h3>Generate certificate and configure Nginx</h3><p>Finally, let's make Certbot get a certificate and configure it automatically to us:</p><pre name="31a7" id="31a7" class="graf graf--pre graf-after--p">$ sudo certbot --nginx -d <strong>temporary-website.tk</strong></pre><p>For this step, you will need to add your email (will receive notifications from Let's Encrypt, if the certificate is about to expire). You will have two options: Redirect or not the requests from HTTP to HTTPS. I chose to Redirect.</p><p>If you previously set a firewall, read the section 'Allow firewall' bellow, if not, that's it, you will have your website using HTTPS. 🎉</p><figure><div class="aspectRatioPlaceholder is-locked"><div class="aspectRatioPlaceholder-fill"></div><img data-image-id="1*9nsRlScBtk99F-8bPlIS-w.png" data-width="1856" data-height="568" data-action="zoom" data-action-value="1*9nsRlScBtk99F-8bPlIS-w.png" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/1-9nsRlScBtk99F-8bPlIS-w.png"></div><figcaption class="imageCaption">Safer website</figcaption></figure><p>The website is working under HTTPS now. Now let's make some more improvements.</p><h3>Allow firewall</h3><p>If you followed the steps in <a href="https://medium.freecodecamp.org/how-to-create-your-first-safe-server-ready-for-production-f1cc60eec69a" target="_blank">this article</a>, now you need to allow HTTPS connections:</p><pre name="5b57" id="5b57" class="graf graf--pre graf-after--p">$ sudo ufw allow https</pre><h3>Update Diffie-Hellman parameters</h3><p>If you followed the previous steps, you can<strong> ignore this</strong> section. But if you are just a curious reader and already implemented these steps on your server, a tip would be to check the size of the Diffie-Hellman parameters. Some old installations have 1024-bit parameters, and <a href="https://weakdh.org/" target="_blank">some studies</a> and NIST's recommendation is to increase the size of the Diffie-Hellman parameters to 2048 bits.</p><figure><div class="aspectRatioPlaceholder is-locked"><div class="aspectRatioPlaceholder-fill"></div><img data-image-id="1*zsfggRXRj1GEhu9R9l3cFQ.png" data-width="930" data-height="176" data-action="zoom" data-action-value="1*zsfggRXRj1GEhu9R9l3cFQ.png" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/1-zsfggRXRj1GEhu9R9l3cFQ.png"></div><figcaption class="imageCaption">This is how 1024-bit parameters seem&nbsp;like</figcaption></figure><figure><div class="aspectRatioPlaceholder is-locked"><div class="aspectRatioPlaceholder-fill"></div><img data-image-id="1*pmwTB_jSvEtm91dBCPWoPg.png" data-width="920" data-height="246" data-action="zoom" data-action-value="1*pmwTB_jSvEtm91dBCPWoPg.png" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/1-pmwTB_jSvEtm91dBCPWoPg.png"></div><figcaption class="imageCaption">This is how 2048-bit parameters seem&nbsp;like</figcaption></figure><p>To create longer 2048-bit parameters run the code below. I suggest you run this command on the folder <code class="markup--code markup--p-code">etc/letsencrypt/</code>because is the place where the default key is stored (<code class="markup--code markup--p-code">ssl-dhparams.pem</code>)</p><pre name="78f6" id="78f6" class="graf graf--pre graf-after--p">$ openssl dhparam -out ssl-dhparams-2048.pem 2048</pre><p>After generating these parameters, we need to change the configuration of Nginx. Go to the folder <code class="markup--code markup--p-code">/etc/nginx/sites-enabled/</code> and edit the file <code class="markup--code markup--p-code">default</code> to something like this:</p><pre name="77c4" id="77c4" class="graf graf--pre graf-after--p">server {<br>    ...<br>    ssl_dhparam /etc/letsencrypt/ssl-dhparams-2048.pem;<br>    ...<br>}</pre><p>Now restart Nginx:</p><pre name="f2eb" id="f2eb" class="graf graf--pre graf-after--p">$ sudo service nginx restart</pre><h3>Update SSL certificate</h3><p>Let's Encrypt certificates expire every 90 days. So you need to renew the certificate often. The Certbot packages installed come with a cron job that automatically renews the certificate before it expires.</p><p>Run this command to test the renewal process (The parameter <code class="markup--code markup--p-code">--dry-run</code> tests without saving any certificates to disk):</p><pre name="d7a8" id="d7a8" class="graf graf--pre graf-after--p">sudo certbot renew --dry-run</pre><p>If it succeeds, you can relax and enjoy life 😂. Certbot will take care that the certificate is updated regularly for you.</p></div><div class="section-inner sectionLayout--insetColumn"><p><a href="https://medium.com/@flaviohfreitas" target="_blank"><em>Follow me</em></a><em> if you want to read more of my articles </em>😘<em> And if you enjoyed this article, be sure to like it give me a lot of claps — it means the world to the writer.</em></p></div><div class="section-inner sectionLayout--insetColumn"><p><strong>Flávio H. de Freitas</strong> is an Entrepreneur, Engineer, Tech lover, Dreamer and Traveler. Has worked as <strong>CTO</strong> in <strong>Brazil</strong>, <strong>Silicon Valley and Europe</strong>.</p><figure><div class="aspectRatioPlaceholder is-locked"><div class="aspectRatioPlaceholder-fill"></div></div></figure></div>
+        
+        <div class="archive-tags">
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/web-development">Web Development</a>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/devops">Devops</a>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/programming">Programming</a>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/software-development">Software Development</a>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/tech">Tech</a>
+          
+        </div>
+        
+
+        <div class="twitter-discussion">
+          <a target="_blank" href="https://twitter.com/search?q=https%3A%2F%2Fhackernoon.com%2Fconfiguring-your-server-to-provide-https-using-lets-encrypt-and-nginx-e46a5ae93e41">Continue the discussion <i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      
+    </div>
+
+
+    <div class="more">
+      
+      <div class="divider-title">
+        <div class="divider"></div>
+        <h1 class="more-heading">More by Flavio H. Freitas</h1>
+        <div class="divider"></div>
+      </div>
+
+      <div class="more-content">
+        
+        
+        
+        
+        <div class="story-card">
+          <a href="https://hackernoon.com/es2019-javascripts-new-features-in-2019-3427026af799">
+            
+            
+            <div class="img" style="background-image: url(&#39;https://hackernoon.com/Devimg/story-image-default.png&#39;)"></div>
+          </a>
+          <div class="excerpt">
+            <div class="title">
+              <a href="https://hackernoon.com/es2019-javascripts-new-features-in-2019-3427026af799">ES2019: Javascript’s new features in 2019 🎉</a>
+            </div>
+            <div class="bio">
+              <div class="flex">
+                <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/flaviohfreitas&#39;)"></div>
+                <div>
+                  <a href="https://hackernoon.com/@flaviohfreitas" class="name">Flavio H. Freitas</a>
+                  <div class="published"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/javascript">Javascript</a>
+          
+        </div>
+        
+        
+        
+        <div class="story-card">
+          <a href="https://hackernoon.com/think-do-measure-and-learn-c2b8eeebeada">
+            
+            
+            <div class="img" style="background-image: url(&#39;https://hackernoon.com/hn-images/1*56tZPJ77d5WykDB3ECZakg.jpeg&#39;)"></div>
+          </a>
+          <div class="excerpt">
+            <div class="title">
+              <a href="https://hackernoon.com/think-do-measure-and-learn-c2b8eeebeada">Think, do, measure and learn #CTOLife</a>
+            </div>
+            <div class="bio">
+              <div class="flex">
+                <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/flaviohfreitas&#39;)"></div>
+                <div>
+                  <a href="https://hackernoon.com/@flaviohfreitas" class="name">Flavio H. Freitas</a>
+                  <div class="published">Sep 01</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/startup">Startup</a>
+          
+        </div>
+        
+        
+        
+        <div class="story-spacer"></div>
+      </div>
+      
+
+      <div id="subscribe-embed">
+        <!-- Begin Mailchimp Signup Form -->
+        <div id="mc_embed_signup">
+          <img class="signup-image" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/saved_resource" alt="">
+          <form action="https://hackernoon.us19.list-manage.com/subscribe/post?u=b48b0ec2173fecf2586c00e80&amp;id=fa796741e6" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate="novalidate">
+            <div class="subscribe-header">
+              <h2>Hackernoon Newsletter curates great stories by real tech professionals</h2>
+              <p>Get solid gold sent to your inbox. Every week!</p>
+            </div>
+            <div class="mc-field-group">
+        
+        <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Email Address *" aria-required="true">
+            </div>
+            <div class="fields-group">
+              <div class="mc-field-group">
+                <input type="text" value="" name="MMERGE1" class="" id="mce-MMERGE1" placeholder="First Name">
+              </div>
+              <div class="mc-field-group">
+                <input type="text" value="" name="MMERGE2" class="" id="mce-MMERGE2" placeholder="Last Name">
+              </div>
+            </div>
+            <div class="mc-field-group input-group topics-list">
+              <strong>Topics of interest </strong>
+              <ul><li class="checkbox"><input checked="" type="checkbox" value="1" name="group[3757][1]" id="mce-group[3757]-3757-0"><label for="mce-group[3757]-3757-0">Software Development</label></li>
+                <li class="checkbox"><input checked="" type="checkbox" value="2" name="group[3757][2]" id="mce-group[3757]-3757-1"><label for="mce-group[3757]-3757-1">Blockchain Crypto</label></li>
+                <li class="checkbox"><input checked="" type="checkbox" value="4" name="group[3757][4]" id="mce-group[3757]-3757-2"><label for="mce-group[3757]-3757-2">General Tech</label></li>
+                <li class="checkbox"><input checked="" type="checkbox" value="8" name="group[3757][8]" id="mce-group[3757]-3757-3"><label for="mce-group[3757]-3757-3">Best of Hacker Noon</label></li>
+              </ul>
+            </div>
+            <div id="mce-responses" class="clear">
+              <div class="response" id="mce-error-response" style="display:none"></div>
+              <div class="response" id="mce-success-response" style="display:none"></div>
+            </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_b48b0ec2173fecf2586c00e80_fa796741e6" tabindex="-1" value=""></div>
+            <div class="submit-btn"><input type="submit" value="Get great stories by email" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+          </form>
+        </div>
+        <!--End mc_embed_signup-->
+      </div>
+
+      
+      <div class="divider-title">
+        <div class="divider"></div>
+        <h1 class="more-heading">More Related Stories</h1>
+        <div class="divider"></div>
+      </div>
+
+      <div class="more-content">
+        
+        <div class="story-card">
+          <a href="https://hackernoon.com/%EF%B8%8F-desktop-apps-for-front-end-development-my-workspace-f2190713f6b1">
+            
+            
+            <div class="img" style="background-image: url(&#39;https://hackernoon.com/hn-images/1*BSYxriEy0AFCaQKzQ1KEvA.png&#39;)"></div>
+          </a>
+          <div class="excerpt">
+            <div class="title">
+              <a href="https://hackernoon.com/%EF%B8%8F-desktop-apps-for-front-end-development-my-workspace-f2190713f6b1">️ Desktop apps for Front-end development. My workspace.</a>
+            </div>
+            <div class="bio">
+              <div class="flex">
+                <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/_alex_buzin&#39;)"></div>
+                <div>
+                  <a href="https://hackernoon.com/@_alex_buzin" class="name">Alexander Buzin</a>
+                  <div class="published">Feb 15</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/web-development">Web Development</a>
+          
+        </div>
+        
+        <div class="story-card">
+          <a href="https://hackernoon.com/1-minute-multi-node-vm-setup-413dfc836fc9">
+            
+            
+            <div class="img" style="background-image: url(&#39;https://hackernoon.com/Devimg/story-image-default.png&#39;)"></div>
+          </a>
+          <div class="excerpt">
+            <div class="title">
+              <a href="https://hackernoon.com/1-minute-multi-node-vm-setup-413dfc836fc9">1-Minute Multi-Node VM Setup</a>
+            </div>
+            <div class="bio">
+              <div class="flex">
+                <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/zwischenzugs&#39;)"></div>
+                <div>
+                  <a href="https://hackernoon.com/@zwischenzugs" class="name">Ian Miell</a>
+                  <div class="published"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/docker">Docker</a>
+          
+        </div>
+        
+        <div class="story-card">
+          <a href="https://hackernoon.com/0-100-in-django-starting-an-app-the-right-way-badd141ef439">
+            
+            
+            <div class="img" style="background-image: url(&#39;https://hackernoon.com/hn-images/1*1ddGwfxl1-w1-kmuJgFgxg.png&#39;)"></div>
+          </a>
+          <div class="excerpt">
+            <div class="title">
+              <a href="https://hackernoon.com/0-100-in-django-starting-an-app-the-right-way-badd141ef439">0–100 in Django: Starting an app the right way</a>
+            </div>
+            <div class="bio">
+              <div class="flex">
+                <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/jeremytiki&#39;)"></div>
+                <div>
+                  <a href="https://hackernoon.com/@jeremytiki" class="name">Jeremy Spencer</a>
+                  <div class="published">Sep 04</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/python">Python</a>
+          
+        </div>
+        
+        <div class="story-card">
+          <a href="https://hackernoon.com/-91aeb58b4689">
+            
+            
+            <div class="img" style="background-image: url(&#39;https://hackernoon.com/hn-images/1*t1zDW6bknkgO0ozFCWJTcw.png&#39;)"></div>
+          </a>
+          <div class="excerpt">
+            <div class="title">
+              <a href="https://hackernoon.com/-91aeb58b4689">A CTO Journal: Building a fintech company for the unbanked — Part 1</a>
+            </div>
+            <div class="bio">
+              <div class="flex">
+                <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/chonantsai&#39;)"></div>
+                <div>
+                  <a href="https://hackernoon.com/@chonantsai" class="name">Cho-Nan Tsai</a>
+                  <div class="published">Aug 16</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/fintech">Fintech</a>
+          
+        </div>
+        
+        <div class="story-card">
+          <a href="https://hackernoon.com/-242f8b94afa1">
+            
+            
+            <div class="img" style="background-image: url(&#39;https://hackernoon.com/Devimg/story-image-default.png&#39;)"></div>
+          </a>
+          <div class="excerpt">
+            <div class="title">
+              <a href="https://hackernoon.com/-242f8b94afa1">A rookie’s guide to raising investment</a>
+            </div>
+            <div class="bio">
+              <div class="flex">
+                <div class="avatar" style="background-image: url(&#39;https://hackernoon.com/archive-avatars/benjilanyado&#39;)"></div>
+                <div>
+                  <a href="https://hackernoon.com/@benjilanyado" class="name">Benji Lanyado</a>
+                  <div class="published"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          <a class="tag" href="https://hackernoon.com/tagged/startup">Startup</a>
+          
+        </div>
+        
+        
+        <div class="story-spacer"></div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="subnav footer">
+    <a href="https://www.hackernoon.com/"><img class="footer__logo" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/hn-logo.png" width="45" height="45"></a>
+    <div>
+      <div class="footer__links">
+        <a href="http://help.hackernoon.com/">Help</a>
+        <a href="https://hackernoon.com/hacker-noon-faqs-with-six-word-answers-aw1ls3z1q">About</a>
+        <a href="https://community.hackernoon.com/session/sso?return_path=https%3A%2F%2Fapp.hackernoon.com">Start Writing</a>
+        <a class="footer__sponsor" href="http://sponsor.hackernoon.com/">Sponsor:</a>
+        <a class="footer__sponsor-type" href="https://sponsor.hackernoon.com/#brandasauthor">Brand-as-Author</a>
+        <a class="footer__sponsor-type" href="https://sponsor.hackernoon.com/#billboard">Sitewide Billboard</a>
+      </div>
+      <div class="footer__privacy-links">
+        <a href="mailto:support@hackernoon.com">Contact Us</a>
+        <a href="http://privacy.hackernoon.com/">Privacy</a>
+        <a href="http://terms.hackernoon.com/">Terms</a>
+      </div>
+    </div>
+    <div>
+      <a href="https://twitter.com/hackernoon" rel="noopener noreferrer" target="_blank"><i class="fab fa-twitter"></i></a>
+      <a href="https://www.facebook.com/hackernoon" rel="noopener noreferrer" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.linkedin.com/company/hackernoon/" rel="noopener noreferrer" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://www.youtube.com/hackernoon" rel="noopener noreferrer" target="_blank"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/firebase-app.js"></script>
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/firebase-auth.js"></script>
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/firebase-firestore.js"></script>
+  <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCjRAcAgsxlffnuZNIr4zOGaIsEKKEaJCg",
+    authDomain: "hackernoon-app.firebaseapp.com",
+    databaseURL: "https://hackernoon-app.firebaseio.com",
+    projectId: "hackernoon-app",
+    storageBucket: "hackernoon-app.appspot.com",
+    messagingSenderId: "521962009898"
+  };
+  firebase.initializeApp(config);
+  </script>
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/js.cookie.min.js"></script>
+
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/interact-archive.js"></script>
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/prism.js"></script>
+  <script>window.upsettings = {'api_key': '24b4421e-81ec-0b84b6a2'}</script><script>(function(){var w=window;var up=w.Upscribe;if(typeof up==="function"){up('reattach_activator');up('update',upsettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Upscribe=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://upscri.be/js/snippet.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if( w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async="" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/js(1)"></script>
+  <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+
+   gtag('config', 'UA-65623566-4', { 'optimize_id': 'GTM-NR267TL'});
+  </script>
+  <script async="" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/services.js"></script>
+  <script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/subscribeform.js"></script>
+  <script async="" src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/mc-validate.js"></script>
+
+
+<script src="./Configuring your server to provide HTTPS using Let&#39;s Encrypt and Nginx - By Flavio H. Freitas_files/annotate.js"></script></body></html>
