@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ModalModule } from './modal/modal.module';
 import { HttpModule } from "@angular/http";
 import { TimeagoModule } from 'ngx-timeago';
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
+//import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 import { enableProdMode } from '@angular/core';
 
@@ -155,8 +155,8 @@ import { Globals } from './globals/global';
     HttpModule,
     ImageCropperModule,
     //CarouselModule,
-    ColorPickerModule,
-    AngularFontAwesomeModule
+    ColorPickerModule
+   // AngularFontAwesomeModule
   ],
   providers: [RouteinfoService, ModalService, Globals],
   entryComponents: [AppComponent, LoginComponent, SignupComponent, PhotosCarouselComponent, MusicListComponent, VideoListComponent],

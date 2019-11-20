@@ -52,5 +52,13 @@ app-chat-window {
     height: 250px;
     margin-right: 10px;
 }
+.chat-panel-container{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    /* display: inline-block; */
+    width: 250px;
+    border-left: 1px solid #e6e6e6;
+}
 
 

@@ -2,6 +2,7 @@
 <div class="chat-window">
 	<div class="chat-window-header white-fonts">
 		<!--<div class="pull-left white-font use-handcursor small-padding">{{info.fullname | limitTo : chatNameLimit || info.name | limitTo : chatNameLimit}}</div>-->
+		<div class="profile-pic-extra-small pull-left" [ngStyle]="{ 'background-image': 'url(' + chatObj.profilepic.imageBuffer + ')'}"></div>
 		<div class="pull-left white-font use-handcursor small-padding full-name">{{chatObj.fullname}}</div>
 		<div class="pull-left white-font use-handcursor small-padding"></div>
 		<div class="pull-right"><i class="fa fa-times cursor-pointer" (click)="closeChatWindow(chatObj.username)"></i></div>

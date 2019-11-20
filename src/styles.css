@@ -359,6 +359,17 @@ i.fa-3x{
     background-size: contain;
     background-repeat: no-repeat;
     margin: 2px;
+    border-radius: 50%;
+    border: 1px solid #2b90d9;
+}
+.profile-pic-extra-small{
+	height: 20px;
+    width: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 1.5px;
+    border-radius: 50%;
+    border: 1px solid #fff;
 }
 
 .profile-pic-medium{
