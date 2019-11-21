@@ -101,18 +101,24 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, AfterViewChec
   }
 
   private displayServerMsg(msgObj){
+    let msgItem;
     if(msgObj.item.username === this.chatObj.username){
        //let html = "<div class='row no-margin msg-row'><div class='msg pull-right col-md-2 no-padding'><img class='profile-pic-icon pull-right' src='"+JSON.parse(obj.senderInfo).profilepic.imageBuffer+"'></div><div style='word-break: break-all; padding-top: 2px;' class='pull-right col-md-10 no-padding text-right msg-field'>"+CreateSmileys.setSmileys(obj.msg)+"</div></div>";
-    let msgItem = "<div class='client-msg msg-row' style='display: inline-block; width: 100%; max-width: 245px;'><div class='msg-img pull-left no-padding'><img class='profile-pic-small pull-left' src='"+msgObj.item.profilepic.imageBuffer+"'></div><div style='word-break: break-all; padding: 4px 8px; line-height: 20px; max-width: 200px; background: #e9ebee; color: #000; border-radius: 10px; border-bottom-left-radius: 0px;' class='pull-left text-right msg-field'>"+UtilityService.setSmileys(msgObj.msg)+"</div></div>";
+    msgItem = "<div class='client-msg msg-row' style='display: inline-block; width: 100%; max-width: 245px;'><div class='msg-img pull-left no-padding'><img class='profile-pic-small pull-left' src='"+msgObj.item.profilepic.imageBuffer+"'></div><div style='word-break: break-all; padding: 4px 8px; line-height: 20px; max-width: 200px; background: #e9ebee; color: #000; border-radius: 10px; border-bottom-left-radius: 0px;' class='pull-left text-right msg-field'>"+UtilityService.setSmileys(msgObj.msg)+"</div></div>";
     //var html = "<div class='row no-margin msg-row'><div class='msg pull-left col-md-2'><img class='profile-pic-icon' src=''></div><div style='word-break: break-all; padding-top: 2px;' class='pull-left col-md-10'>"+CreateSmileys.setSmileys(obj.msg)+"</div></div>";
-    this.chatWindowBody.nativeElement.insertAdjacentHTML('beforeend', msgItem);
+    
    /* try{
       scrollToBottom($("chat-window").find("#"+validID).find('.chat-panel-body'), $("chat-window").find("#"+validID).find('.chat-panel-body').scrollHeight);
     //$(".chat-body-height").mCustomScrollbar();
     }catch(err){
       console.log(err);
     }*/
+    }else if(msgObj.item.username === this.loginData.username){
+       msgItem = "<div class='client-msg msg-row' style='display: inline-block; width: 100%; max-width: 245px;'><div class='pull-right no-padding red-fonts'><i class='fa fa-warning' aria-hidden='true'></i><span>This Person is offline.</span></div></div>";
+      //var html = "<div class='row no-margin msg-row'><div class='msg pull-left col-md-2'><img class='profile-pic-icon' src=''></div><div style='word-break: break-all; padding-top: 2px;' class='pull-left col-md-10'>"+CreateSmileys.setSmileys(obj.msg)+"</div></div>";
+      
     }
-    
+
+    this.chatWindowBody.nativeElement.insertAdjacentHTML('beforeend', msgItem);
   }
 }

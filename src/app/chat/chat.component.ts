@@ -215,6 +215,11 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 			//console.log('new msg'+ data.chatid+'///'+ data.msg);
 		});
 
+		this.socket.on('ON_RECEIVER_OFFLINE', function(data){
+			self.openChatWindowOnNewMessage(data);
+			//console.log('new msg'+ data.chatid+'///'+ data.msg);
+		});
+
 	    window.addEventListener('onAppLoggedOut', function (e) {
         	self.closeSocket();
         	self.triggerWindowEvent('onDisConnect', {'event': 'onConnect', 'msgObj': {}});
@@ -244,6 +249,14 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 	private openChatWindowOnNewMessage(data){
 		this.cachedChatData = {};
 		let match = false;
+		//handle receiver offline notification
+		if(this.userId === data.item.username){
+			this.windowReady = true;
+			delete this.cachedChatData;
+			//this.appChatWindow.displayServerMsg(data);
+			this.triggerWindowEvent('onMessageDisplay', {'event': 'onMessageDisplay', 'msgObj': data});
+			return;
+		}
 		for(let i in this.chatWindowList){
 			if(this.chatWindowList[i].username === data.item.username){
 				match = true;
