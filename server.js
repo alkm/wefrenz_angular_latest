@@ -168,6 +168,7 @@ app.use(function(req, res, next) {
 	//Handling the chat on socket
 	io.sockets.on('connection', function(socket){//Similar to document.ready when the socket initialized
 		socket.on('ON_SOCKET_INIT', function(data){
+			console.log('socket data'+JSON.stringify(data));
 			socket.userid = data.userid;
 			handleActiveUsers(socket, data.userid, data.easyrtcid);
 		});
@@ -176,11 +177,22 @@ app.use(function(req, res, next) {
 			//io.sockets.emit("ON_NEW_MSG", data);//To all users connected in socket
 			
 			var receiverSocket = usedSockets[data.chatid];
-			console.log('dreceiverSocket'+receiverSocket+'msg'+data.msg);
-			try{
-				receiverSocket.emit("ON_NEW_MSG", data);//To specific user to whom message is sent
-			}catch(err){
-				console.log('socket error');
+			var senderSocket = usedSockets[data.item.username];
+			//console.log('receiverSocket'+receiverSocket+'msg'+data.msg);
+			console.log('receiver is offline'+receiverSocket);
+				console.log(usedSockets+'sender'+senderSocket);
+			if(!receiverSocket){
+				try{
+					senderSocket.emit("ON_RECEIVER_OFFLINE", data)
+				}catch(err){
+					console.log('Socket Error'+err);
+				}
+			}else{
+				try{
+					receiverSocket.emit("ON_NEW_MSG", data);//To specific user to whom message is sent
+				}catch(err){
+					console.log('socket error');
+				}
 			}
 		});
 
