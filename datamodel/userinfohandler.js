@@ -100,7 +100,7 @@ module.exports = function(app) {
 		});
 	});
 	app.post('/api/logIn', function(req, res) {
-		userInfo.collection.ensureIndex({fullname: "text"}, function(error) {});
+		userInfo.collection.createIndexes({fullname: "text"}, function(error) {});
 		try{
 			signInInfo.findOne({username: req.body.email}, function(err, users){
 				if(err){
