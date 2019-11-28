@@ -23,15 +23,6 @@ app.set('port', config.server.port);
 /*Settign ssl port****/
 app.set('sslport', config.ssl.port);
 
-var chatBuddiesConnected = [];
-var chatClients = {};
-var chatBuddies = [];
-// list of socket ids
-var clients = [];
-var usedSockets = {};
-
-
-
 //app.use(bodyParser.json());
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true})); // support encoded bodies
@@ -76,8 +67,8 @@ mongoose.connect(database.url, function(err){
 	//app.use(serveStatic(__dirname + '/dynamictable/'));
 	//Setting the virtual path 'resources' as I don't want to show user the actual path of the images
 	app.use('/data/', express.static(__dirname + '/media/images/coverpics/')); 
-	app.use('/default/', express.static(__dirname + '/dist/assets/images/')); 
-	app.use('/emotion/', express.static(__dirname + '/dist/assets/images/smileys/'));
+	app.use('/default/', express.static(__dirname + '/dist/wefrenz/assets/images/')); 
+	app.use('/emotion/', express.static(__dirname + '/dist/wefrenz/assets/images/smileys/'));
 	app.use('/video/', express.static(__dirname + '/media/videos/myvideos/'));
 	app.use('/audio/', express.static(__dirname + '/media/audios/myaudios/'));
 	app.use('/music/', express.static(__dirname + '/media/audios/feedaudios/original/'));
@@ -148,117 +139,21 @@ app.use(function(req, res, next) {
 });
 
 // routes ======================================================================
-	require('./datamodel/userinfohandler.js')(app);
-	require('./datamodel/mediauploader.js')(app);
-    require('./datamodel/GeneralDataSet.js')(app);
-    require('./datamodel/profilehandler.js')(app);
-	require('./datamodel/friendshandler.js')(app);
-	require('./datamodel/searchhandler.js')(app);
-	require('./datamodel/chathandler.js')(app);
-	require('./datamodel/videohandler.js')(app);
-	require('./datamodel/audiohandler.js')(app);
-	require('./datamodel/photoshandler.js')(app);
-	require('./datamodel/feedhandler.js')(app);
-	require('./datamodel/commenthandler.js')(app);
-	require('./datamodel/markethandler.js')(app);
-	require('./datamodel/checkouthandler.js')(app);
-	require('./datamodel/addresshandler.js')(app);
-	require('./datamodel/notificationhandler.js')(app);
-	var easyRTCHandler = require('./datamodel/shared/easyrtchandler');
-	//Handling the chat on socket
-	io.sockets.on('connection', function(socket){//Similar to document.ready when the socket initialized
-		socket.on('ON_SOCKET_INIT', function(data){
-			console.log('socket data'+JSON.stringify(data));
-			socket.userid = data.userid;
-			handleActiveUsers(socket, data.userid, data.easyrtcid);
-		});
-		socket.on('ON_SEND_MSG', function(data){
-			//Emitting the info back to client 
-			//io.sockets.emit("ON_NEW_MSG", data);//To all users connected in socket
-			
-			var receiverSocket = usedSockets[data.chatid];
-			var senderSocket = usedSockets[data.item.username];
-			//console.log('receiverSocket'+receiverSocket+'msg'+data.msg);
-			console.log('receiver is offline'+receiverSocket);
-				console.log(usedSockets+'sender'+senderSocket);
-			if(!receiverSocket){
-				try{
-					senderSocket.emit("ON_RECEIVER_OFFLINE", data)
-				}catch(err){
-					console.log('Socket Error'+err);
-				}
-			}else{
-				try{
-					receiverSocket.emit("ON_NEW_MSG", data);//To specific user to whom message is sent
-				}catch(err){
-					console.log('socket error');
-				}
-			}
-		});
-
-
-		socket.on('disconnect', function(data){
-			if(socket.userid !== undefined){
-				handleClientDisconnected(socket, socket.userid);
-				console.log(socket.userid+' is disconnected');
-			}
-			
-			
-			//Set user appearance status in db
-			/*userInfo.update({_id : socket.userid}, { $set: {appearance: "offline"}}, function(error, docs){
-				if(error){
-					console.log("Error"+error);
-				}else{
-					io.sockets.emit("UPDATE_CHAT_LIST", "");
-				}
-			});*/
-		});
-	});
-
-	function handleActiveUsers(socket, userid, easyrtcid){
-		console.log('easyrtcid'+easyrtcid);
-		//Saving all the users connected in socket
-		for(var i = 0; i < chatBuddiesConnected.length ; i++){
-			if(userid === chatBuddiesConnected[i]){
-				console.log("Looks like you are already connected");
-				return;
-			}
-		}
-		
-		chatBuddiesConnected.push(userid);
-		chatClients[socket.userid] = userid;
-		usedSockets[userid] = socket;
-
-		var obj = {};
-		obj.email = userid;
-		obj.easyrtcid = easyrtcid;
-		easyRTCHandler.updateEasyRTCIdToDB(obj);
-
-		var _obj = {};
-		_obj.email = userid;
-		_obj.appearance = "online";
-		console.log('_obj'+_obj);
-		easyRTCHandler.updateSocketStatusToDB(_obj);
-		//chatHandler.updateEasyRTCIdToDB(obj);
-	}
-	function handleClientDisconnected(socket, userid){
-		console.log("disconnected");
-		//chatBuddiesConnected.splice(0,chatClients[socket.userid]); 
-		var indx = chatBuddiesConnected.indexOf(chatClients[socket.userid]);
-		if(indx !== -1){
-			chatBuddiesConnected.splice(indx, 1);
-			delete usedSockets[userid];
-			delete chatClients[socket.userid];
-			var obj = {};
-			obj.email = userid;
-			obj.easyrtcid = '';
-			easyRTCHandler.updateEasyRTCIdToDB(obj);
-
-			var _obj = {};
-			_obj.email = userid;
-			_obj.appearance = "offline";
-			easyRTCHandler.updateSocketStatusToDB(_obj);
-		}
-	}
-
-
+	require('./datamodel/userinfohandler')(app);
+	require('./datamodel/mediauploader')(app);
+    require('./datamodel/GeneralDataSet')(app);
+    require('./datamodel/profilehandler')(app);
+	require('./datamodel/friendshandler')(app);
+	require('./datamodel/searchhandler')(app);
+	require('./datamodel/chathandler')(app);
+	require('./datamodel/videohandler')(app);
+	require('./datamodel/audiohandler')(app);
+	require('./datamodel/photoshandler')(app);
+	require('./datamodel/feedhandler')(app);
+	require('./datamodel/commenthandler')(app);
+	require('./datamodel/markethandler')(app);
+	require('./datamodel/checkouthandler')(app);
+	require('./datamodel/addresshandler')(app);
+	require('./datamodel/notificationhandler')(app);
+	require('./datamodel/sockethandler')(io);
+	

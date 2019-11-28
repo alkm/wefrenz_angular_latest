@@ -194,8 +194,8 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 		let chatObj = {'userid': this.userId, 'easyrtcid': easyrtcId};
 		//require(['socket-io'], function(io) {
 		//this.socket = io('https://192.168.1.3:3000/');
-		if (window.location.href.indexOf("127.0.0.1") > -1) {
-      		this.socket = io('http://127.0.0.1:3000');
+		if (window.location.href.indexOf("localhost") > -1) {
+      		this.socket = io('http://localhost:3000');
     	}else{
     		this.socket = io('https://wefrenz.com/');
     	}
