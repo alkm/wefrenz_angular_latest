@@ -1,0 +1,58 @@
+.comment-controls .fa-thumbs-up, .comment-controls .fa-heart, .comment-controls .fa-comment{
+    margin: 0px 3px 0px 0px;
+}
+ .comment-controls .fa-heart, .comment-controls .fa-comment{
+ 	margin: 0px 3px;
+ }
+ .comment-edit-items{
+ 	position: absolute;
+    left: 233px;
+    margin-top: 38px;
+    z-index: 1000;
+ }
+ .comment-profile-pic{
+ 	height: 26px;
+ 	width: 26px;
+ 	border-radius: 50%;
+  border: 1px solid #2b90d9;
+ }
+.full-name{
+	padding-left: 3px;
+}
+ .feed-item{
+    word-wrap: break-word;
+ }
+ .edit-feed{
+ 	height: 30px;
+    width: 30px;
+    line-height: 29px;
+    border: 1px solid #e6e6e6 !important;
+    border-radius: 3px;
+ }
+ .edit-feed i{
+ 	margin: 0px 9px;
+ }
+
+  .edit-feed:hover{
+  	border: 1px solid red !important;
+  }
+  .edit-feed:hover i{
+  	color: red !important;
+  }
+
+  .comment-arrow{
+  	position: absolute;
+    left: 296px;
+    margin-top: 29px;
+  }
+  .comment-controls{
+  	display: inline-block;
+    padding: 0px 5px 0px 0px;
+  }
+
+  .story-close-icon{
+    left: 278px;
+    margin-top: 8px;
+    position: absolute;
+  }
+

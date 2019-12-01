@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PublicComponent } from './public/public.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { EntertainmentComponent } from './entertainment/entertainment.component';
-import { StoriesComponent } from './stories/stories.component';
-import { MarketComponent } from './market/market.component';
-import { CheckoutComponent } from './checkout/checkout.component';
-import { PeopleComponent } from './people/people.component';
+import { PublicComponent } from './components/public/public.component';
+import { HomeComponent } from './components/home/home.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { EntertainmentComponent } from './components/entertainment/entertainment.component';
+import { StoriesComponent } from './components/stories/stories.component';
+import { MarketComponent } from './components/market/market.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { PeopleComponent } from './components/people/people.component';
 
 const routes: Routes = [
         {

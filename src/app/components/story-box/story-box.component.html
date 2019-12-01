@@ -1,0 +1,335 @@
+<div class="inline-block colw100 story-feed" [ngClass]="{'comment-box': isComment === true}" id="feedTop">
+	<div *ngIf="!isComment; then profilePicBox"></div>
+	<ng-template #profilePicBox>
+		<!--<div class="profile-pic no-padding pull-left contain-bg" [ngStyle]="{ 'background-image': 'url(' + profilePic + ')'}">
+		</div>-->
+	</ng-template>
+	<div name="story" #storyBox class="story-box colw100 inline-block no-outline auto-overflow pull-left" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" data-placeholder-default="What’s happening?" aria-autocomplete="list" aria-expanded="false" [style.color]="color" [style.font-family]="fontFamily" [style.font-size]="fontSize" [style.font-weight]="fontWeight" [style.text-decoration]="txtDeco" [style.font-style]="fontStyle"  [innerHTML]="storyContent" 
+	(keyup)="onStoryContentChange($event)" (keydown)="onStoryContentChanged($event.keyCode)">
+	</div>
+	<div class="control-bar inline-block">
+		<div class="pull-left color-picker-icon">
+			<input [colorPicker]="color" (colorPickerChange)="color=$event; colorPickerChange($event);" [style.background]="color" class="cursor-pointer"/>
+		</div>
+		<div class="pull-left text-style-btn gray-fonts cursor-pointer sqr-btn" (click)="toggleTextStyling($event); clickedInside($event);">
+			<i class="fa fa-edit"></i>
+		</div>
+		<div *ngIf="isShowTextStyling; then textStyling"></div>
+		<ng-template #textStyling>
+			<div class="list-items pull-left text-styles">
+				<div class="arrow-up white-bg"></div>
+				<div class="pull-left font-bold-btn gray-fonts cursor-pointer text-center" [class.high-light]="isBoldBtnHighLight" (click)="applyBold($event); clickedInside($event);">
+					<span>B</span>
+				</div>
+				<div class="pull-left font-ul-btn gray-fonts cursor-pointer text-center" [class.high-light]="isULBtnHighLight" (click)="applyUnderline($event); clickedInside($event);">
+					<span>U</span>
+				</div>
+				<div class="pull-left font-italic-btn gray-fonts cursor-pointer text-center" [class.high-light]="isIBtnHighLight"  (click)="applyItalic($event);clickedInside($event);">
+					<span>I</span>
+				</div>
+				<div class="pull-left font-family-btn" (click)="toggleFontFamily($event); clickedInside($event);">
+					<div>
+						<i class="fa fa-font gray-fonts cursor-pointer"></i>
+					</div>
+					<div *ngIf="isShowFontFamily; then fontFamilies"></div>
+					<ng-template #fontFamilies>
+						<div class="list-items font-items pull-left">
+							<div class="arrow-up white-bg"></div>
+							<div class="cursor-pointer list-item" (click)="applyFontFamily($event, 'Arial')">Arial</div>
+							<div class="cursor-pointer list-item" (click)="applyFontFamily($event, 'Times New Roman')">Times New Roman</div>
+							<div class="cursor-pointer list-item" (click)="applyFontFamily($event, 'Courier New')">Courier New</div>
+						</div>
+					</ng-template>
+				</div>
+				<div class="pull-left font-size-btn" (click)="clickedInside($event)">
+					<div class="gray-fonts cursor-pointer text-center" (click)="toggleFontSize($event)"><span>{{fontSize}}</span></div>
+					<div *ngIf="isShowFontSize; then fontSizes"></div>
+					<ng-template #fontSizes>
+						<div class="list-items font-sizes pull-left">
+							<div class="arrow-up white-bg"></div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 9)">9</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 10)">10</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 11)">11</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 12)">12</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 13)">13</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 14)">14</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 15)">15</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 16)">16</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 17)">17</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 18)">18</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 19)">19</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 20)">20</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 21)">21</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 22)">22</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 23)">23</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 24)">24</div>
+							<div class="cursor-pointer list-item" (click)="applyFontSize($event, 25)">25</div>
+						</div>
+					</ng-template>
+				</div>
+			</div>
+		</ng-template>
+		<div class="pull-left smiley-btn gray-fonts cursor-pointer text-center sqr-btn" [class.high-light]="isEmotionsHighLight"  (click)="showEmotions($event);clickedInside($event);">
+			<i class="fa fa-smile-o"></i>
+		</div>
+		<div *ngIf="isEmotionsHighLight; then emotions"></div>
+		<ng-template #emotions>
+			<div class="arrow-up white-bg" id="emotionArrow"></div>
+			<div class="list-items font-items pull-left emo-list">
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':)')">
+					<span><img src="assets/images/smileys/socialutility-emotion0-smile.gif"/></span>
+				</div>
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':(')">
+					<span><img src="assets/images/smileys/socialutility-emotion1-sadsmile.gif"/></span>
+				</div>
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':D')">
+					<span><img src="assets/images/smileys/socialutility-emotion2-bigsmile.gif"/></span>
+				</div>
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, '8=)')">
+					<span><img src="assets/images/smileys/socialutility-emotion3-cool.gif"/></span>
+				</div>
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':o')">
+					<span><img src="assets/images/smileys/socialutility-emotion4-surprised.gif"/></span>
+				</div>
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ';)')">
+					<span><img src="assets/images/smileys/socialutility-emotion5-wink.gif"/></span>
+				</div>
+
+
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ';(')">
+					<span><img src="assets/images/smileys/socialutility-emotion6-crying.gif"/></span>
+				</div>
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, '(:|')">
+					<span><img src="assets/images/smileys/socialutility-emotion7-sweating.gif"/></span>
+				</div>					
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':|')">
+					<span><img src="assets/images/smileys/socialutility-emotion8-speechless.gif"/></span>
+				</div>					
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':*')">
+					<span><img src="assets/images/smileys/socialutility-emotion9-kiss.gif"/></span>
+				</div>					
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, 'emotion10-tongueout')">
+					<span><img src="assets/images/smileys/socialutility-emotion10-tongueout.gif"/></span>
+				</div>					
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':$')">
+					<span><img src="assets/images/smileys/socialutility-emotion11-blush.gif"/></span>
+				</div>					
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, ':^)')">
+					<span><img src="assets/images/smileys/socialutility-emotion12-wondering.gif"/></span>
+				</div>					
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, '|-)')">
+					<span><img src="assets/images/smileys/socialutility-emotion13-sleepy.gif"/></span>
+				</div>					
+				<div class="cursor-pointer list-item pull-left" (click)="addEmotion($event, '|(')">
+					<span><img src="assets/images/smileys/socialutility-emotion14-dull.gif"/></span>
+				</div>
+			</div>
+		</ng-template>
+		<div class="pull-left up-img-btn gray-fonts cursor-pointer text-center" (click)= "imageInput.value = ''; imageInput.click();">
+			<i class="fa fa-picture-o" aria-hidden="true"></i>
+		</div>
+		<div class="pull-left up-mus-btn gray-fonts cursor-pointer text-center" (click)= "musicInput.value = ''; musicInput.click();">
+			<i class="fa fa-music" aria-hidden="true"></i>
+		</div>
+		<div class="pull-left up-vid-btn gray-fonts cursor-pointer text-center" (click)= "videoInput.value = ''; videoInput.click();">
+			<i class="fa fa-file-video-o" aria-hidden="true"></i>
+		</div>
+		<div  *ngIf="!isComment; then checkIn"></div>
+		<ng-template #checkIn>
+			<div class="checkin-btn pull-left up-vid-btn gray-fonts cursor-pointer text-center" (click)="doCheckIn($event)">
+					<i class="fa fa-map-marker" aria-hidden="true"></i>
+			</div>
+		</ng-template>
+		<div *ngIf="!isComment; then postBtn  else addBtn"></div>
+		<ng-template #postBtn>
+			<div class="pull-left post-button blue-fonts cursor-pointer text-center">
+				<div *ngIf="isAddPost; then addPost else updatePost"></div>
+				<ng-template #addPost>
+					<button class="btn btn-primary" class="post-btn" type="button" (click)="postStory($event)" [disabled]="(storyBox.innerText.trim().length === 0) && (!isSmileyAdded)">
+						<span>Post</span>
+						<i class="fa fa-share-square-o" aria-hidden="true"></i>
+					</button>
+				</ng-template>
+				<ng-template #updatePost>
+					<button class="btn btn-primary" class="post-btn" type="button" (click)="updateStory($event)" [disabled]="(storyBox.innerText.trim().length === 0) && (!isSmileyAdded)">
+						<span>Update</span>
+						<i class="fa fa-share-square-o" aria-hidden="true"></i>
+					</button>
+				</ng-template>
+			</div>
+		</ng-template>
+		<ng-template #addBtn>
+			<div class="pull-left post-button blue-fonts cursor-pointer text-center">
+				<div *ngIf="isAddComment; then addComment else updateComment"></div>
+				<ng-template #addComment>
+					<button class="btn btn-primary" class="post-btn" type="button" (click)="postStory($event)" [disabled]="(storyBox.innerText.trim().length === 0) && (!isSmileyAdded)">
+						<span>Add</span>
+						<i class="fa fa-plus" aria-hidden="true"></i>
+					</button>
+				</ng-template>
+				<ng-template #updateComment>
+					<button class="btn btn-primary" class="post-btn" type="button" (click)="updateCommentItem($event)" 
+						[disabled]="(storyBox.innerText.trim().length === 0) && (!isSmileyAdded)">
+						<span>Update</span>
+						<i class="fa fa-edit" aria-hidden="true"></i>
+					</button>
+				</ng-template>
+			</div>
+		</ng-template>
+	</div>
+	<!--<div class="action-bar">
+		<div class="pull-left">
+			<button class="btn btn-primary" id="postBtn" type="button" (click)="checkIn($event)">
+				<span>Check In</span>
+				<i class="fa fa-map-marker" aria-hidden="true"></i>
+			</button>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-primary" id="postBtn" type="button" (click)="updateStory($event)">
+				<span>Go Live</span>
+				<i class="fa fa-video-camera" aria-hidden="true"></i>
+			</button>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-primary" id="postBtn" type="button" (click)="updateStory($event)">
+				<span>Activity</span>
+				<i class="fa fa-share-square-o" aria-hidden="true"></i>
+			</button>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-primary" id="postBtn" type="button" (click)="updateStory($event)">
+				<span>Event</span>
+				<i class="fa fa-share-square-o" aria-hidden="true"></i>
+			</button>
+		</div>
+	</div> -->
+    <div class="file-input-container">
+        <form [formGroup]="imageUploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group" [formGroup]="imageGroup">
+                <input type="file" accept="image/*" class="file-input" name="uploadimage" #imageInput (change)="fileChangeEvent($event, 'image')"/>
+            </div>
+        </form>
+        <form [formGroup]="musicUploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group" [formGroup]="musicGroup">
+                <input type="file" accept="audio/*" class="file-input" name="uploadmusic" #musicInput (change)="fileChangeEvent($event, 'music')"/>
+            </div>
+        </form>
+        <form [formGroup]="videoUploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group" [formGroup]="videoGroup">
+                <input type="file" accept="video/*" class="file-input" name="uploadvideo" #videoInput (change)="fileChangeEvent($event, 'video')"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div *ngIf="!isComment then storyFeedItem"></div>
+<ng-template #storyFeedItem>
+	<div class="inline-block colw100 story-feed" #storyFeed>
+		<app-feeditem *ngFor="let item of feedItem" [item]="item" [userId]="userId" (refreshFeed)="refreshFeedItem($event)" 
+		(editCurrentFeedItem)= "editCurrentFeedItem($event)"></app-feeditem>
+		<div *ngIf="isLoading then loading"></div>
+		<ng-template #loading>
+			<div class="spinner-bg">
+				<div class="spinner">
+					<i class="fa fa-2x fa-spin fa-spinner blue-fonts"></i>
+					<span class="blue-fonts">&nbsp;Loading...</span>
+				</div>
+			</div>
+		</ng-template>
+		<div *ngIf="(!isLoading && (feedItem.length > limit)) then endResult"></div>
+		<ng-template #endResult>
+			<div class="end-result blue-fonts text-center">--- End Of Result ---</div>
+		</ng-template>
+	</div>
+</ng-template>
+
+<app-modal [modalTitle]="'Post Preview'" [blocking]='false' [modalId]='modalId'>
+	<div class="post-desc-content">
+		<div class="colw100 inline-block">
+			<div *ngIf="fileType === 'image' then previewPic"></div>
+			<div *ngIf="fileType === 'music' then previewMusic"></div>
+			<div *ngIf="fileType === 'video' then previewVideo"></div>
+			<div *ngIf="fileType === 'checkin' then previewCheckIn"></div>
+			<ng-template #previewPic>
+				<div class="preview-posted-pic pull-left" [ngStyle]="{'background': 'url(' + encodedImage+ ')'}"></div>
+				<div class="pull-right">
+		            <div>
+		                <input type="text" class="form-control no-bg no-brder-radius blue-fonts blue-border" placeholder="title" id="postTitle" [(ngModel)]="postTitle">
+		            </div>
+		            <div class="form-group">
+		                <textarea class="form-control no-resize no-bg no-brder-radius blue-fonts blue-border" rows="5" cols="30" placeholder="Add Description..." id="postDesc" [(ngModel)]="postDesc">
+		                </textarea>
+		            </div>
+		        </div>
+		        <div *ngIf="isPostImage; then addImagePost else updateImagePost"></div>
+		        <ng-template #addImagePost>
+			        <div class="colw100 inline-block">			
+						<button id="okBtn" type="button" class="btn btn-primary text-center small-btn ok-btn" (click)="postImage($event)" [disabled]="isProgress">
+							<span class="pull-left">Post</span>
+							<i class="fa fa-share-square-o" aria-hidden="true"></i>
+						</button>
+					</div>
+				</ng-template>
+				<ng-template #updateImagePost>
+			        <div class="colw100 inline-block">			
+						<button id="okBtn" type="button" class="btn btn-primary text-center small-btn ok-btn" (click)="updateImage($event)" [disabled]="isProgress">
+							<span class="pull-left">Update</span>
+							<i class="fa fa-share-square-o" aria-hidden="true"></i>
+						</button>
+					</div>
+				</ng-template>
+			</ng-template>
+			<ng-template #previewMusic>
+				<div class="preview-posted-music pull-left">
+					<audio #musicPlayer  preload="none" controls id="previewMusicPlayer">
+				        <source src="{{postedMusicPath}}" type="audio/mp3">
+				        <p>Your browser does not support the HTML5 Audio element.</p>
+				    </audio>
+				    <progress value="0" max="100" id="progressBar" [value]="uploadProgress" [hidden]="!isProgress"></progress>  
+				</div>
+				<div class="pull-right">
+		            <div>
+		                <input type="text" class="form-control no-bg no-brder-radius blue-fonts blue-border" placeholder="title" id="postTitle" [(ngModel)]="postTitle">
+		            </div>
+		            <div class="form-group">
+		                <textarea class="form-control no-resize no-bg no-brder-radius blue-fonts blue-border" rows="5" cols="30" placeholder="Add Description..." id="postDesc" [(ngModel)]="postDesc">
+		                </textarea>
+		            </div>
+		        </div>
+		        <div class="colw100 inline-block">			
+					<button id="okBtn" type="button" class="btn btn-primary text-center small-btn ok-btn" (click)="postMusic($event)" [disabled]="isProgress">
+						<span class="pull-left">Post</span>
+						<i class="fa fa-share-square-o" aria-hidden="true"></i>
+					</button>
+				</div>
+			</ng-template>
+			<ng-template #previewVideo>
+				<div class="preview-posted-video pull-left">
+				    <video #videoPlayer id='previewVideoPlayer' controls poster="{{posterPath}}">
+				        <source src="{{postedVideoPath}}" type='video/mp4'>
+				      	<p>Your browser does not support the HTML5 Video element.</p>
+				    </video>
+				    <progress value="0" max="100" id="progressBar" [value]="uploadProgress" [hidden]="!isProgress"></progress>  
+				</div>
+				<div class="pull-right">
+		            <div>
+		                <input type="text" class="form-control no-bg no-brder-radius blue-fonts blue-border" placeholder="title" id="postTitle" [(ngModel)]="postTitle">
+		            </div>
+		            <div class="form-group">
+		                <textarea class="form-control no-resize no-bg no-brder-radius blue-fonts blue-border" rows="5" cols="30" placeholder="Add Description..." id="postDesc" [(ngModel)]="postDesc">
+		                </textarea>
+		            </div>
+		        </div>
+		        <div class="colw100 inline-block">			
+					<button id="okBtn" type="button" class="btn btn-primary text-center small-btn ok-btn" (click)="postVideo($event)" [disabled]="isProgress">
+						<span class="pull-left">Post</span>
+						<i class="fa fa-share-square-o" aria-hidden="true"></i>
+					</button>
+				</div>
+			</ng-template>
+			<ng-template #previewCheckIn>
+				<app-checkin (checkInItem)="onCheckIn($event)"></app-checkin>
+			</ng-template>
+		</div>
+	</div>
+</app-modal>
