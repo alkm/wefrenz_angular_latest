@@ -67,7 +67,6 @@ export class VideoPlayerComponent implements OnInit {
 	      'albumTitle': ['', [Validators.required, ValidationService.blankDataValidator]],
 	      'albumDesc': ['', [Validators.required, ValidationService.blankDataValidator]]
 	    });
-
 	    this.fetchVideoAlbumInfo();
   	}
 
