@@ -149,7 +149,8 @@ export class ProfileAreaComponent implements OnInit {
 				navigator.getUserMedia({audio: false, video: true}, function(stream) {
 				//this._self.localStream = stream;
 				_self.localStream = stream;
-				video.src = window.URL.createObjectURL(stream);
+				//video.src = window.URL.createObjectURL(stream);
+				video.srcObject = stream;
 			  }, errorCallback);
 			} else {
 				alert("Your Browser does not support Camera");

@@ -4645,7 +4645,8 @@ var Easyrtc = function() {
      *      document.getElementById("myVideo").src = easyrtc.getLocalStreamAsUrl();
      */
     self.getLocalStreamAsUrl = function(streamName) {
-        var stream = getLocalMediaStreamByName(streamName);
+        //var stream = getLocalMediaStreamByName(streamName);
+        var stream = new MediaStream();
         if (stream === null) {
             throw "Developer error: attempt to get a MediaStream without invoking easyrtc.initMediaSource successfully";
         }

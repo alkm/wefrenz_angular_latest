@@ -6,7 +6,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'ubuntu',
-      host: 'ec2-52-202-7-252.compute-1.amazonaws.com',
+      host: 'ec2-54-152-45-163.compute-1.amazonaws.com',
       key: '~/.ssh/wefrenz_keypair.pem',
       ref: 'origin/master',
       repo: 'https://github.com/alkm/wefrenz_angular_latest.git',
